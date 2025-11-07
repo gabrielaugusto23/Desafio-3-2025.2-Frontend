@@ -1,15 +1,7 @@
-import './App.css'
+import Board from "./pages/Board";
 
 function App() {
-  return (
-    <div>
-      <h1>Kanban Board</h1>
-      <h1 className="text-3xl font-bold text-blue-600">
-        Tailwind is working 🎉
-      </h1>
-    </div>
-    
-  );
+  return <Board />;
 }
 
 export default App;
