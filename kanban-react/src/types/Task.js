@@ -4,6 +4,12 @@ export const TaskStatus = {
   DONE: "done",
 };
 
+export const TaskStatusLabels = {
+  todo: "A Fazer",
+  doing: "Em Andamento",
+  done: "Concluído",
+};
+
 export class Task {
   constructor({ id, title, description, responsible, deadline, status }) {
     this.id = id;
