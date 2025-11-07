@@ -1,19 +1,17 @@
 import { useState, useEffect } from "react";
 
 export default function TaskFormModal({ status, onSave, onCancel, initialData }) {
-  // set initial state with empty values or with data if editing
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [responsible, setResponsible] = useState("");
   const [deadline, setDeadline] = useState("");
 
-  // when initialData changes (like when editing a card)
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title || "");
       setDescription(initialData.description || "");
       setResponsible(initialData.responsible || "");
-      setDeadline(initialData.deadline || "");
+      setDeadline(initialData.deadline || ""); 
     }
   }, [initialData]);
 
@@ -24,7 +22,7 @@ export default function TaskFormModal({ status, onSave, onCancel, initialData })
       title,
       description,
       responsible,
-      deadline,
+      deadline, 
       status,
     };
     onSave(newTask);
