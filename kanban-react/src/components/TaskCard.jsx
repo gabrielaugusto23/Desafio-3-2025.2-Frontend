@@ -14,10 +14,16 @@ export default function TaskCard({ task, index, onDelete, onEdit }) {
   }[task.status] || "bg-gray-400";
 
   const handleEdit = (e) => {
-    // Prevent triggering edit when clicking delete
     if (e.target.closest(".delete-btn")) return;
     setIsEditing(true);
   };
+
+  function formatDateToBrazilian(isoDate) {
+    if (!isoDate) return "";
+    const date = new Date(isoDate);
+    if (isNaN(date)) return isoDate;
+    return date.toLocaleDateString("pt-BR");
+  }
 
   return (
     <>
@@ -32,12 +38,11 @@ export default function TaskCard({ task, index, onDelete, onEdit }) {
             onClick={handleEdit}
             className={`${bgColor} text-white rounded-xl shadow-md p-4 hover:shadow-lg transition relative cursor-pointer`}
           >
-            {/* Delete Button (appears only on hover) */}
             {isHovered && (
               <button
                 className="absolute top-1 right-1 delete-btn bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition"
                 onClick={(e) => {
-                  e.stopPropagation(); // prevent opening modal
+                  e.stopPropagation();
                   onDelete(task.id);
                 }}
               >
@@ -59,7 +64,7 @@ export default function TaskCard({ task, index, onDelete, onEdit }) {
                 </div>
                 <div className="flex items-center gap-2">
                   <CalendarDays size={14} />
-                  <span>{task.deadline || "Sem prazo"}</span>
+                  <span>{task.deadline ? formatDateToBrazilian(task.deadline) : "Sem prazo"}</span>
                 </div>
               </div>
               <div className="text-sm opacity-90 leading-snug pl-2">
@@ -69,8 +74,6 @@ export default function TaskCard({ task, index, onDelete, onEdit }) {
           </div>
         )}
       </Draggable>
-
-      {/* Edit modal */}
       {isEditing && (
         <TaskFormModal
           status={task.status}
