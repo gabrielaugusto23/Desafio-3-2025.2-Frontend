@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Task } from "../types/Task";
+import { TaskStatusLabels } from "../types/Task";
 
 export default function TaskFormModal({ status, onSave, onCancel }) {
   const [title, setTitle] = useState("");
@@ -19,6 +20,14 @@ export default function TaskFormModal({ status, onSave, onCancel }) {
     });
     onSave(newTask);
   };
+
+  const statusColor = {
+    todo: "bg-blue-100 text-blue-700",
+    doing: "bg-yellow-100 text-yellow-700",
+    done: "bg-green-100 text-green-700",
+  }[status] || "bg-gray-100 text-gray-700";
+
+  const translatedStatus = TaskStatusLabels[status] || status;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
@@ -53,6 +62,12 @@ export default function TaskFormModal({ status, onSave, onCancel }) {
           value={deadline}
           onChange={(e) => setDeadline(e.target.value)}
         />
+
+        <div
+          className={`text-sm font-medium px-3 py-1 rounded-full ${statusColor} w-fit mb-4`}
+        >
+          {translatedStatus}
+        </div>
 
         <div className="flex justify-end gap-3">
           <button
