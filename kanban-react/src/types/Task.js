@@ -7,7 +7,7 @@ export const TaskStatus = {
 export const TaskStatusLabels = {
   todo: "A Fazer",
   doing: "Em Andamento",
-  done: "Concluído",
+  done: "Feito",
 };
 
 export class Task {
