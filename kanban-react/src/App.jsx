@@ -43,9 +43,23 @@ export default function App() {
     }));
   };
 
+  const handleDeleteTask = (status, taskId) => {
+    setTasks((prev) => ({
+      ...prev,
+      [status]: prev[status].filter((t) => t.id !== taskId),
+    }));
+  };
+
+  const handleEditTask = (status, taskId, updatedTask) => {
+    setTasks((prev) => ({
+      ...prev,
+      [status]: prev[status].map((t) => (t.id === taskId ? { ...updatedTask, id: taskId } : t)),
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col items-center py-10">
-      <h1 className="text-3xl font-bold mb-10">Kanban Board</h1>
+      <h1 className="text-3xl font-bold mb-10">Kanban</h1>
       <div className="relative w-full max-w-6xl">
         <div className="grid grid-cols-3 text-center font-semibold text-xl mb-6">
           <div className="border-b-1 border-gray-400 py-3">A Fazer</div>
@@ -61,18 +75,24 @@ export default function App() {
               status={TaskStatus.TODO}
               tasks={tasks[TaskStatus.TODO]}
               onAddTask={(task) => handleAddTask(TaskStatus.TODO, task)}
+              onDeleteTask={(id) => handleDeleteTask(TaskStatus.TODO, id)}
+              onEditTask={(id, updatedTask) => handleEditTask(TaskStatus.TODO, id, updatedTask)}
             />
             <KanbanColumn
               title="Em Andamento"
               status={TaskStatus.DOING}
               tasks={tasks[TaskStatus.DOING]}
               onAddTask={(task) => handleAddTask(TaskStatus.DOING, task)}
+              onDeleteTask={(id) => handleDeleteTask(TaskStatus.DOING, id)}
+              onEditTask={(id, updatedTask) => handleEditTask(TaskStatus.DOING, id, updatedTask)}
             />
             <KanbanColumn
               title="Feito"
               status={TaskStatus.DONE}
               tasks={tasks[TaskStatus.DONE]}
               onAddTask={(task) => handleAddTask(TaskStatus.DONE, task)}
+              onDeleteTask={(id) => handleDeleteTask(TaskStatus.DONE, id)}
+              onEditTask={(id, updatedTask) => handleEditTask(TaskStatus.DONE, id, updatedTask)}
             />
           </div>
         </DragDropContext>
