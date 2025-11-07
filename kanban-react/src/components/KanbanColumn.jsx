@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { Droppable } from "@hello-pangea/dnd";
 import TaskCard from "./TaskCard";
 import TaskFormModal from "./TaskForm";
 
 export default function KanbanColumn({ title, tasks, status, onAddTask }) {
   const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="bg-white p-4 rounded-2xl shadow-md w-72 md:w-120 sm:w-full">
       <div className="flex justify-between items-center mb-4">
@@ -15,22 +17,35 @@ export default function KanbanColumn({ title, tasks, status, onAddTask }) {
           +
         </button>
       </div>
-      <div className="
-        space-y-3 
-        max-h-[708px] 
-        overflow-y-auto 
-        pr-1 
-        scrollbar-thin 
-        scrollbar-thumb-gray-400 
-        scrollbar-track-transparent 
-        hover:scrollbar-thumb-gray-500
-      ">
-        {tasks.length > 0 ? (
-          tasks.map((task) => <TaskCard key={task.id} task={task} />)
-        ) : (
-          <p className="text-gray-400 text-center italic">Sem tarefas</p>
+
+      <Droppable droppableId={status}>
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className="
+              space-y-3 
+              max-h-[708px] 
+              overflow-y-auto 
+              pr-1 
+              scrollbar-thin 
+              scrollbar-thumb-gray-400 
+              scrollbar-track-transparent 
+              hover:scrollbar-thumb-gray-500
+            "
+          >
+            {tasks.length > 0 ? (
+              tasks.map((task, index) => (
+                <TaskCard key={task.id} task={task} index={index} />
+              ))
+            ) : (
+              <p className="text-gray-400 text-center italic">Sem tarefas</p>
+            )}
+            {provided.placeholder}
+          </div>
         )}
-      </div>
+      </Droppable>
+
       {showModal && (
         <TaskFormModal
           status={status}
