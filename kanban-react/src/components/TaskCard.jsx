@@ -1,43 +1,39 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { TaskStatusLabels } from "../types/Task";
+import { CalendarDays, User } from "lucide-react";
 
 export default function TaskCard({ task, index }) {
-  const statusColor = {
-    todo: "bg-blue-100 text-blue-700",
-    doing: "bg-yellow-100 text-yellow-700",
-    done: "bg-green-100 text-green-700",
-  }[task.status] || "bg-gray-100 text-gray-700";
-
-  const translatedStatus = TaskStatusLabels[task.status] || task.status;
+  const bgColor = {
+    todo: "bg-[#8B5E3C]",
+    doing: "bg-[#3C5A8B]",
+    done: "bg-[#3C8B83]",
+  }[task.status] || "bg-gray-400";
 
   return (
     <Draggable draggableId={task.id.toString()} index={index}>
       {(provided) => (
         <div
-          className="flex justify-center mb-3"
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          className={`${bgColor} text-white rounded-xl shadow-md p-4 hover:shadow-lg transition`}
         >
-          <div className="w-full bg-white border border-gray-300 rounded-xl p-3 shadow-sm hover:shadow-md transition">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-lg font-semibold text-gray-700">
-                {task.title}
-              </h3>
-              <span
-                className={`text-xs font-medium px-2 py-1 rounded-full ${statusColor}`}
-              >
-                {translatedStatus}
-              </span>
+          <h3 className="text-center text-base font-semibold pb-2 mb-3 border-b border-white/30 truncate">
+            {task.title}
+          </h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-2 text-sm pr-3 border-r border-white/30">
+              <div className="flex items-center gap-2">
+                <User size={14} />
+                <span className="truncate">{task.responsible || "Sem responsável"}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CalendarDays size={14} />
+                <span>{task.deadline || "Sem prazo"}</span>
+              </div>
             </div>
-
-            <p className="text-sm text-gray-600 mb-2">{task.description}</p>
-            <p className="text-xs text-gray-500">
-              <strong>Responsável:</strong> {task.responsible}
-            </p>
-            <p className="text-xs text-gray-500">
-              <strong>Prazo:</strong> {task.deadline}
-            </p>
+            <div className="text-sm opacity-90 leading-snug pl-2">
+              <p className="line-clamp-5 break-words">{task.description}</p>
+            </div>
           </div>
         </div>
       )}
