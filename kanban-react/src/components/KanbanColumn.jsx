@@ -5,57 +5,49 @@ import TaskFormModal from "./TaskForm";
 
 export default function KanbanColumn({ title, tasks, status, onAddTask }) {
   const [showModal, setShowModal] = useState(false);
-
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-md w-72 md:w-120 sm:w-full">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-700">{title}</h2>
+    <div className="flex flex-col items-center">
+      <div className="bg-white rounded-2xl border border-gray-300 shadow-md flex flex-col w-[350px] p-4">
+        <Droppable droppableId={status}>
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="flex-1 space-y-3 overflow-y-auto px-2"
+              style={{
+                maxHeight: "620px", 
+              }}
+            >
+              {tasks.length > 0 ? (
+                tasks.map((task, index) => (
+                  <TaskCard key={task.id} task={task} index={index} />
+                ))
+              ) : (
+                <p className="text-gray-400 text-center italic">Sem tarefas</p>
+              )}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        <div className="mt-4 flex justify-center">
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-500 text-white cursor-pointer px-3 py-1 rounded-lg hover:bg-blue-600 transition"
+          className="mt-4 w-full bg-gray-800 text-white text-lg rounded-xl py-2 hover:bg-gray-900 cursor-pointer transition"
         >
           +
         </button>
-      </div>
-
-      <Droppable droppableId={status}>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="
-              space-y-3 
-              max-h-[708px] 
-              overflow-y-auto 
-              pr-1 
-              scrollbar-thin 
-              scrollbar-thumb-gray-400 
-              scrollbar-track-transparent 
-              hover:scrollbar-thumb-gray-500
-            "
-          >
-            {tasks.length > 0 ? (
-              tasks.map((task, index) => (
-                <TaskCard key={task.id} task={task} index={index} />
-              ))
-            ) : (
-              <p className="text-gray-400 text-center italic">Sem tarefas</p>
-            )}
-            {provided.placeholder}
-          </div>
+        </div>
+        {showModal && (
+          <TaskFormModal
+            status={status}
+            onSave={(task) => {
+              onAddTask(task);
+              setShowModal(false);
+            }}
+            onCancel={() => setShowModal(false)}
+          />
         )}
-      </Droppable>
-
-      {showModal && (
-        <TaskFormModal
-          status={status}
-          onSave={(task) => {
-            onAddTask(task);
-            setShowModal(false);
-          }}
-          onCancel={() => setShowModal(false)}
-        />
-      )}
+      </div>
     </div>
   );
 }
